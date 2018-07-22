@@ -2,7 +2,8 @@ export const DOMobjects = {
   searchForm: document.querySelector('.search'),
   searchInput: document.querySelector('.search__field'),
   searchResultContainer: document.querySelector('.results'),
-  searchResultList: document.querySelector('.results__list')
+  searchResultList: document.querySelector('.results__list'),
+  searchResultPages: document.querySelector('.results__pages')
 };
 
 export const dynamicObjectStrings = {
