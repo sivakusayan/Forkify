@@ -68,7 +68,6 @@ DOMobjects.searchResultPages.addEventListener('click', event => {
 
 const controlRecipe = async () => {
   const id = window.location.hash.replace('#', '');
-  console.log(id);
 
   if (id) {
     //Prepare UI for changes
@@ -76,7 +75,6 @@ const controlRecipe = async () => {
     renderLoader(DOMobjects.recipe);
 
     //Highlight selected search item
-    console.log(state.search);
     if (state.search) searchView.highlightSelected(id);
 
     //Create new recipe object
@@ -102,3 +100,14 @@ const controlRecipe = async () => {
 
 ['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
 
+//Handling recipe button clicks
+DOMobjects.recipe.addEventListener('click', event => {
+  if (event.target.matches('.btn-decrease, .btn-decrease *') && state.recipe.servings > 1) {
+    // Decrease button is clicked
+    state.recipe.updateServings('dec');
+  } else if (event.target.matches('.btn-increase, .btn-increase *')) {
+    // Increase button is clicked
+    state.recipe.updateServings('inc');
+  }
+  recipeView.updateServingsIngredients(state.recipe);
+})
