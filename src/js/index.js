@@ -18,7 +18,7 @@ const state = {};
 /*-------------------------------------------*/
 const controlSearch = async () => {
   //1. Get query from view
-  const query = 'pizza';
+  const query = searchView.getInput();
   
   if (query) {
     //2. New search object and set to state
@@ -75,6 +75,10 @@ const controlRecipe = async () => {
     recipeView.clearRecipe();
     renderLoader(DOMobjects.recipe);
 
+    //Highlight selected search item
+    console.log(state.search);
+    if (state.search) searchView.highlightSelected(id);
+
     //Create new recipe object
     state.recipe = new Recipe(id);
     window.r = state.recipe;
@@ -97,3 +101,4 @@ const controlRecipe = async () => {
 };
 
 ['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
+

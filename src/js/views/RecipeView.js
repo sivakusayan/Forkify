@@ -1,15 +1,24 @@
+import fraction from 'fraction.js';
+
 import { DOMobjects } from './base';
 
 export const clearRecipe = () => {
     DOMobjects.recipe.innerHTML = '';
-}
+};
+
+const formatCount = count => {
+    if (count) {
+        return new fraction(count).toFraction(true);
+    }
+    return '?';
+};
 
 const createIngredient = ingredient => `
   <li class="recipe__item">
       <svg class="recipe__icon">
           <use href="img/icons.svg#icon-check"></use>
       </svg>
-      <div class="recipe__count">${ingredient.count}</div>
+      <div class="recipe__count">${formatCount(ingredient.count)}</div>
       <div class="recipe__ingredient">
           <span class="recipe__unit">${ingredient.unit}</span>
           ${ingredient.ingredient}
@@ -22,7 +31,7 @@ export const renderRecipe = recipe => {
     <figure class="recipe__fig">
         <img src="${recipe.imgURL}" alt="${recipe.title}" class="recipe__img">
         <h1 class="recipe__title">
-            <span>Pasta with tomato cream sauce</span>
+            <span>${recipe.title}</span>
         </h1>
     </figure>
 
