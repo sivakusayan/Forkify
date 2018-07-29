@@ -16,7 +16,6 @@ import { DOMobjects, renderLoader, clearLoader } from './views/base';
 */
 
 const state = {};
-window.state = state;
 
 /*-------------------------------------------*/
 /* SEARCH CONTROLLER */
@@ -77,7 +76,6 @@ const controlRecipe = async () => {
       clearLoader();
       recipeView.renderRecipe(state.recipe, state.likes.isLiked(id));
     } catch (error) {
-      console.log(error);
       alert('Error processing recipe!');
     }
   }
