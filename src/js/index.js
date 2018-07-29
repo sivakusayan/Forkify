@@ -1,10 +1,12 @@
 import Search from './models/Search';
 import Recipe from './models/Recipe';
 import List from './models/List';
+import Like from './models/Likes';
 import * as searchView from './views/SearchView';
 import * as recipeView from './views/RecipeView';
 import * as listView from './views/ListView';
 import { DOMobjects, renderLoader, clearLoader } from './views/base';
+import Likes from './models/Likes';
 
 /*Global state of the app
 --Search Object
@@ -45,25 +47,6 @@ const controlSearch = async () => {
     }
   }
 }
-
-DOMobjects.searchForm.addEventListener('submit', event => {
-  event.preventDefault();
-  controlSearch();
-});
-
-window.addEventListener('load', event => {
-  event.preventDefault();
-  controlSearch();
-});
-
-DOMobjects.searchResultPages.addEventListener('click', event => {
-  const btn = event.target.closest('.btn-inline');
-  if (btn) {
-    const goToPage = parseInt(btn.dataset.goto);
-    searchView.clearResults();
-    searchView.renderResults(state.search.result, goToPage);
-  }
-})
 
 /*-------------------------------------------*/
 /* RECIPE CONTROLLER */
@@ -117,6 +100,57 @@ const controlList = () => {
   })
 }
 
+/*-------------------------------------------*/
+/* LIST CONTROLLER */
+/*-------------------------------------------*/
+
+const controlLike = () => {
+  const currentID = state.recipe.id;
+  if (!state.likes) state.likes = new Likes();
+
+  //User has NOT yet liked current recipe
+  if(!state.likes.isLiked(currentID)) {
+    //Add like to the state
+    const newLike = state.likes.addLike(currentID, state.recipe.title, state.recipe.author, state.recipe.imgURL)
+    //Toggle the like button
+
+    //Add like to UI list
+    console.log(state.likes);
+  //User has HAS liked current recipe
+  } else {
+    //Remove like to the state
+    state.likes.deleteLike(currentID)
+    //Toggle the like button
+
+    //Remove like to UI list
+    console.log(state.likes);
+  }
+}
+
+/*-------------------------------------------*/
+/* EVENT LISTENERS */
+/*-------------------------------------------*/
+
+DOMobjects.searchForm.addEventListener('submit', event => {
+  event.preventDefault();
+  controlSearch();
+});
+
+window.addEventListener('load', event => {
+  event.preventDefault();
+  controlSearch();
+});
+
+DOMobjects.searchResultPages.addEventListener('click', event => {
+  const btn = event.target.closest('.btn-inline');
+  if (btn) {
+    const goToPage = parseInt(btn.dataset.goto);
+    searchView.clearResults();
+    searchView.renderResults(state.search.result, goToPage);
+  }
+})
+
+
 //Handle delete and update list item events
 DOMobjects.shopping.addEventListener('click', e => {
   const id = e.target.closest('.shopping__item').dataset.itemid;
@@ -145,8 +179,10 @@ DOMobjects.recipe.addEventListener('click', event => {
     state.recipe.updateServings('inc');
     recipeView.updateServingsIngredients(state.recipe);
   } else if (event.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
+    //Add ingredients to shopping list
     controlList();
+  } else if (event.target.matches('.recipe__love, .recipe__love *')) {
+    // Like controller
+    controlLike();
   }
 })
-
-window.l = new List(); 
